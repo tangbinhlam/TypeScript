@@ -48,7 +48,19 @@ class ProjectInput {
   @autoBind
   private submitHandler(event: Event) {
     event.preventDefault();
-    console.log(this.titleElement.value);
+    const [title, description, people] = [
+      this.titleElement.value,
+      this.descriptionElement.value,
+      this.peopleElement.value,
+    ];
+    console.log(title, description, people);
+    this.clear();
+  }
+
+  private clear() {
+    this.titleElement.value = '';
+    this.descriptionElement.value = '';
+    this.peopleElement.value = '';
   }
 
   private configure() {
