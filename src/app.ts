@@ -1,3 +1,34 @@
+interface Validatable {
+  value: string | number;
+  required?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  min?: number;
+  max?: number;
+}
+
+function validate(validateInput: Validatable) {
+  let isValid = true;
+  if (validateInput.required) {
+    isValid = isValid && validateInput.value.toString().trim().length !== 0;
+  }
+  if (validateInput.minLength && typeof validateInput.value === 'string') {
+    isValid =
+      isValid && validateInput.value.trim().length > validateInput.minLength;
+  }
+  if (validateInput.maxLength && typeof validateInput.value === 'string') {
+    isValid =
+      isValid && validateInput.value.trim().length < validateInput.maxLength;
+  }
+  if (validateInput.min && typeof validateInput.value === 'number') {
+    isValid = isValid && validateInput.value > validateInput.min;
+  }
+  if (validateInput.max && typeof validateInput.value === 'number') {
+    isValid = isValid && validateInput.value < validateInput.max;
+  }
+  return isValid;
+}
+
 function autoBind(_: any, _2: string, descriptor: PropertyDescriptor) {
   const originalMethod = descriptor.value;
   const ajustDes: PropertyDescriptor = {
@@ -53,8 +84,14 @@ class ProjectInput {
       this.descriptionElement.value,
       this.peopleElement.value,
     ];
+    const isValid = validate({ value: title, required: true, minLength: 2 });
+
     console.log(title, description, people);
-    this.clear();
+    if (!isValid) {
+      alert('Invalid');
+    } else {
+      this.clear();
+    }
   }
 
   private clear() {
